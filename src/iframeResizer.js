@@ -110,7 +110,7 @@
 		function resizeIFrame(){
 			function resize(){
 				setSize(messageData);
-				setPagePosition();
+				setPagePosition(iframeId);
 			}
 
 			ensureInRange('Height');
@@ -289,9 +289,7 @@
 		}
 
 		function scrollTo(){
-			if (false !== settings[iframeId].scrollCallback(pagePosition)){
-				setPagePosition();
-			}
+			setPagePosition(iframeId);
 		}
 
 		function findTarget(location){
@@ -435,9 +433,13 @@
 		}
 	}
 
-	function setPagePosition(){
+	function setPagePosition(iframeId){
+	    var doScroll = true;
 		if(null !== pagePosition){
-			window.scrollTo(pagePosition.x,pagePosition.y);
+		    if (iframeId) {
+                doScroll = settings[iframeId].scrollCallback(pagePosition);
+            }
+		    if (doScroll) { window.scrollTo(pagePosition.x,pagePosition.y); };
 			log(' Set page position: '+pagePosition.x+','+pagePosition.y);
 			pagePosition = null;
 		}
